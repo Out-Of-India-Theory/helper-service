@@ -1,0 +1,17 @@
+{
+  "ServerConfig": {
+    "Port": "8080",
+    "Env": "DEV",
+    "PrometheusPort": "8085",
+    "PrometheusEnabled": false,
+    "NewRelicEnabled": true,
+    "AppName": "image-generator-service",
+    "NewRelicLicense": "XXX"
+  },
+  "AwsClientConfig": {
+    "Address": "http://internal-staging-internal-lb-428946047.ap-south-1.elb.amazonaws.com:8080"
+  },
+  "SupplyClientConfig": {
+    "Address": "http://internal-staging-internal-lb-428946047.ap-south-1.elb.amazonaws.com:8080"
+  }
+}
