@@ -5,8 +5,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/Out-Of-India-Theory/helper-service/config"
 	"github.com/Out-Of-India-Theory/oit-go-commons/logging"
-	"github.com/Out-Of-India-Theory/supply-pn-image-generator/config"
 	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
@@ -31,7 +31,12 @@ func InitImageUploader(ctx context.Context, configuration *config.Configuration)
 }
 
 func (s *ImageUploader) UploadToS3(ctx context.Context, fileName string, fileStream []byte) (string, error) {
-	apiURL := fmt.Sprintf("%s/platform/document/v1/upload/jyotisha_pn_image?file_name=%s", s.configuration.SupplyClientConfig.Address, fileName)
+	var apiURL string
+	if s.configuration.ServerConfig.Env == "PROD" || s.configuration.ServerConfig.Env == "PRODUCTION" {
+		apiURL = fmt.Sprintf("%s/platform/document/v1/upload/prod_supply_pn_images?file_name=%s", s.configuration.SupplyClientConfig.Address, fileName)
+	} else {
+		apiURL = fmt.Sprintf("%s/platform/document/v1/upload/jyotisha_pn_image?file_name=%s", s.configuration.SupplyClientConfig.Address, fileName)
+	}
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, apiURL, bytes.NewReader(fileStream))
 	if err != nil {
 		s.logger.Error("failed to create upload request", zap.Error(err))

@@ -2,9 +2,9 @@ package image_generator
 
 import (
 	"context"
+	"github.com/Out-Of-India-Theory/helper-service/config"
+	"github.com/Out-Of-India-Theory/helper-service/service/facade"
 	"github.com/Out-Of-India-Theory/oit-go-commons/logging"
-	"github.com/Out-Of-India-Theory/supply-pn-image-generator/config"
-	"github.com/Out-Of-India-Theory/supply-pn-image-generator/service/facade"
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
 	"net/http"
