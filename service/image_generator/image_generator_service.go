@@ -5,9 +5,9 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"github.com/Out-Of-India-Theory/helper-service/service/image_uploader"
+	"github.com/Out-Of-India-Theory/helper-service/service/supply"
 	"github.com/Out-Of-India-Theory/oit-go-commons/logging"
-	"github.com/Out-Of-India-Theory/supply-pn-image-generator/service/image_uploader"
-	"github.com/Out-Of-India-Theory/supply-pn-image-generator/service/supply"
 	"github.com/chromedp/chromedp"
 	"go.uber.org/zap"
 	"image"
@@ -40,7 +40,7 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 	}
 
 	prashnaTranslations := map[string]string{
-		"en": fmt.Sprintf("Your Jyotish Consultation\nhas been assigned to\n%s", supplyDetails.Data.NameV1["en"]),
+		"en": fmt.Sprintf("Your Jyotisha Consultation\nhas been assigned to\n%s", supplyDetails.Data.NameV1["en"]),
 		"hi": fmt.Sprintf("आपकी ज्योतिष परामर्श सेवा\n%s को\nसौंप दी गई है।", supplyDetails.Data.NameV1["hi"]),
 		"kn": fmt.Sprintf("ನಿಮ್ಮ ಜ್ಯೋತಿಷ್ಯ ಸಲಹೆ\n%s ಗೆ\nಹಂಚಲಾಗಿದೆ", supplyDetails.Data.NameV1["kn"]),
 		"gu": fmt.Sprintf("તમારી જ્યોતિષ પરામર્શ સેવા\n%s ને\nસોંપવામાં આવી છે।", supplyDetails.Data.NameV1["gu"]),
@@ -125,6 +125,11 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 			return fmt.Errorf("prashna image_generator failed (%s): %w", lang, err)
 		}
 
+		//fileKey := fmt.Sprintf("%d_prashna_%s", supplyId, lang)
+		//if err := saveImageLocally(fileKey, imgBytes); err != nil {
+		//	return err
+		//}
+
 		if _, err := s.imageUploader.UploadToS3(ctx, fmt.Sprintf("%d_prashna_%s", supplyId, lang), imgBytes); err != nil {
 			return err
 		}
@@ -144,6 +149,11 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 		if err != nil {
 			return fmt.Errorf("jyotisha image_generator failed (%s): %w", lang, err)
 		}
+
+		//fileKey = fmt.Sprintf("%d_jyotisha_%s", supplyId, lang)
+		//if err := saveImageLocally(fileKey, imgBytes); err != nil {
+		//	return err
+		//}
 
 		if _, err := s.imageUploader.UploadToS3(ctx, fmt.Sprintf("%d_jyotisha_%s", supplyId, lang), imgBytes); err != nil {
 			return err
@@ -171,6 +181,15 @@ func imageToPNGBytes(img image.Image) ([]byte, error) {
 		return nil, err
 	}
 	return buf.Bytes(), nil
+}
+
+func saveImageLocally(fileName string, imgBytes []byte) error {
+	dir := "local_images"
+	if err := os.MkdirAll(dir, 0755); err != nil {
+		return err
+	}
+	path := filepath.Join(dir, fileName+".png")
+	return os.WriteFile(path, imgBytes, 0644)
 }
 
 func GenerateHTMLToImage(ctx context.Context, htmlPath string, values map[string]string) ([]byte, error) {

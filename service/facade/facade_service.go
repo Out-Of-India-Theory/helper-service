@@ -2,11 +2,11 @@ package facade
 
 import (
 	"context"
+	"github.com/Out-Of-India-Theory/helper-service/config"
+	"github.com/Out-Of-India-Theory/helper-service/service/image_generator"
+	"github.com/Out-Of-India-Theory/helper-service/service/image_uploader"
+	"github.com/Out-Of-India-Theory/helper-service/service/supply"
 	"github.com/Out-Of-India-Theory/oit-go-commons/logging"
-	"github.com/Out-Of-India-Theory/supply-pn-image-generator/config"
-	"github.com/Out-Of-India-Theory/supply-pn-image-generator/service/image_generator"
-	"github.com/Out-Of-India-Theory/supply-pn-image-generator/service/image_uploader"
-	"github.com/Out-Of-India-Theory/supply-pn-image-generator/service/supply"
 	"go.uber.org/zap"
 )
 

@@ -1,10 +1,9 @@
-module github.com/Out-Of-India-Theory/image-generator-service
+module github.com/Out-Of-India-Theory/helper-service
 
 go 1.24.3
 
 require (
 	github.com/Out-Of-India-Theory/oit-go-commons v0.1.0-rc
-	github.com/Out-Of-India-Theory/supply-pn-image-generator v0.0.0-20260102123521-b27162321ccf
 	github.com/chromedp/chromedp v0.14.2
 	github.com/gin-gonic/gin v1.11.0
 	github.com/newrelic/go-agent/v3 v3.42.0
