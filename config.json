@@ -5,7 +5,7 @@
     "PrometheusPort": "8085",
     "PrometheusEnabled": false,
     "NewRelicEnabled": true,
-    "AppName": "image-generator-service",
+    "AppName": "helper-service",
     "NewRelicLicense": "XXX"
   },
   "AwsClientConfig": {

@@ -34,7 +34,7 @@ on:
 
 env:
   AWS_REGION: ap-south-1
-  ECR_REPOSITORY: image-generator-service
+  ECR_REPOSITORY: helper-service
 
 #permissions:
 #  contents: read

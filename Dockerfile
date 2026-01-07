@@ -31,9 +31,9 @@ RUN fc-cache -f -v
 RUN go env -w GOPRIVATE="github.com/Out-Of-India-Theory" \
     && git config --global url."https://oit-devops:${TOKEN}@github.com".insteadOf "https://github.com"
 
-COPY . /go/src/github.com/Out-Of-India-Theory/image-generator-service
+COPY . /go/src/github.com/Out-Of-India-Theory/helper-service
 
-WORKDIR /go/src/github.com/Out-Of-India-Theory/image-generator-service
+WORKDIR /go/src/github.com/Out-Of-India-Theory/helper-service
 
 RUN echo $GOPRIVATE
 
