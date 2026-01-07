@@ -23,23 +23,13 @@ type ImageGeneratorService struct {
 	logger        *zap.Logger
 	supplyService supply.Service
 	imageUploader image_uploader.Service
-	chromeCtx     context.Context
 }
 
 func InitImageGeneratorService(ctx context.Context, supplyService supply.Service, imageUploader image_uploader.Service) *ImageGeneratorService {
-	opts := append(chromedp.DefaultExecAllocatorOptions[:],
-		chromedp.Flag("headless", true),
-		chromedp.Flag("disable-gpu", true),
-		chromedp.Flag("no-sandbox", true),
-		chromedp.Flag("disable-dev-shm-usage", true),
-	)
-	allocCtx, _ := chromedp.NewExecAllocator(context.Background(), opts...)
-	chromeCtx, _ := chromedp.NewContext(allocCtx)
 	return &ImageGeneratorService{
 		logger:        logging.WithContext(ctx),
 		supplyService: supplyService,
 		imageUploader: imageUploader,
-		chromeCtx:     chromeCtx,
 	}
 }
 
@@ -203,8 +193,6 @@ func saveImageLocally(fileName string, imgBytes []byte) error {
 }
 
 func (s *ImageGeneratorService) GenerateHTMLToImage(ctx context.Context, htmlPath string, values map[string]string) ([]byte, error) {
-	ctx, cancel := context.WithTimeout(s.chromeCtx, 30*time.Second)
-	defer cancel()
 	opts := append(chromedp.DefaultExecAllocatorOptions[:],
 		chromedp.Flag("headless", true),
 		chromedp.Flag("disable-gpu", true),
@@ -244,7 +232,7 @@ func (s *ImageGeneratorService) GenerateHTMLToImage(ctx context.Context, htmlPat
 	err = chromedp.Run(ctx,
 		chromedp.EmulateViewport(1120, 800, chromedp.EmulateScale(2)), // MUST match CSS
 		chromedp.Navigate("file://"+absPath),
-		chromedp.WaitReady("body", chromedp.ByQuery),
+		chromedp.Sleep(2*time.Second),
 		chromedp.FullScreenshot(&buf, 100),
 	)
 	if err != nil {
