@@ -9,6 +9,7 @@ import (
 	"go.uber.org/zap"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 type Controller struct {
@@ -26,18 +27,22 @@ func InitImageGeneratorController(ctx context.Context, service facade.Service, c
 }
 
 func (con *Controller) GeneratePNImage(c *gin.Context) {
-	ctx := c.Request.Context()
 	supplyIdStr := c.Param("supply_id")
 	supplyId, err := strconv.Atoi(supplyIdStr)
-	err = con.service.ImageGeneratorService().GenerateImage(ctx, supplyId)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid supply_id"})
 		return
 	}
+	go func() {
+		bgCtx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
+		defer cancel()
 
-	c.JSON(http.StatusOK, gin.H{
-		"data":    nil,
-		"status":  http.StatusOK,
-		"message": "Successful",
+		if err := con.service.ImageGeneratorService().GenerateImage(bgCtx, supplyId); err != nil {
+			con.logger.Error("image generation failed", zap.Error(err))
+		}
+	}()
+	c.JSON(http.StatusAccepted, gin.H{
+		"status":  http.StatusAccepted,
+		"message": "Image generation started",
 	})
 }
