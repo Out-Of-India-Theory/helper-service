@@ -19,11 +19,22 @@ RUN mkdir -p /usr/share/fonts/noto
 WORKDIR /usr/share/fonts/noto
 
 # Download required fonts
-RUN curl -L -o NotoSansTamil-Regular.ttf https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansTamil/NotoSansTamil-Regular.ttf && \
-    curl -L -o NotoSansTelugu-Regular.ttf https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansTelugu/NotoSansTelugu-Regular.ttf && \
-    curl -L -o NotoSansDevanagari-Regular.ttf https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansDevanagari/NotoSansDevanagari-Regular.ttf && \
-    curl -L -o NotoSansKannada-Regular.ttf https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansKannada/NotoSansKannada-Regular.ttf && \
-    curl -L -o NotoSansGujarati-Regular.ttf https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansGujarati/NotoSansGujarati-Regular.ttf
+RUN curl -L -o NotoSansTamil-Regular.ttf https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansTamil/NotoSansTamil-Regular.ttf
+
+# Telugu Light
+RUN curl -L -o NotoSansTelugu-Light.ttf https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansTelugu/NotoSansTelugu-Light.ttf
+
+# Devanagari (Hindi, Marathi)
+RUN curl -L -o NotoSansDevanagari-Regular.ttf https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansDevanagari/NotoSansDevanagari-Regular.ttf
+
+# Malayalam
+RUN curl -L -o NotoSansMalayalam-Regular.ttf https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansMalayalam/NotoSansMalayalam-Regular.ttf
+
+# Bengali
+RUN curl -L -o NotoSansBengali-Regular.ttf https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansBengali/NotoSansBengali-Regular.ttf
+
+# Kannada
+RUN curl -L -o NotoSansKannada-Regular.ttf https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansKannada/NotoSansKannada-Regular.ttf
 
 # Rebuild font cache
 RUN fc-cache -f -v
