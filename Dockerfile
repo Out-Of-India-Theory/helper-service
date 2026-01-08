@@ -51,7 +51,7 @@ RUN echo $GOPRIVATE
 RUN go mod tidy \
     && go mod download
 
-RUN GOOS=linux GOARCH=amd64 go build -o main .
+RUN GOOS=linux GOARCH=arm64 go build -o main .
 
 EXPOSE 8080
 
