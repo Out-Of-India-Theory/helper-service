@@ -12,11 +12,11 @@ import (
 var configuration *Configuration
 
 type Configuration struct {
-	AppConfig          AppConfig
-	ServerConfig       config.AppConfig
-	DatabaseConfig     config.PostgresConfig
-	SupplyClientConfig HttpClientConfig
-	AwsClientConfig    HttpClientConfig
+	AppConfig            AppConfig
+	ServerConfig         config.AppConfig
+	DatabaseConfig       config.PostgresConfig
+	OMSClientConfig      HttpClientConfig
+	PlatformClientConfig HttpClientConfig
 }
 
 type HttpClientConfig struct {

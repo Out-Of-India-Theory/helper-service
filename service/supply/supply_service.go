@@ -25,7 +25,7 @@ func InitSupplyService(ctx context.Context, config *config.Configuration) *Suppl
 }
 
 func (s *SupplyService) GetSupplyDetails(ctx context.Context, supplyId int) (*SupplyResponse, error) {
-	url := fmt.Sprintf("%s/internal/supply/supplies/%d", s.config.SupplyClientConfig.Address, supplyId)
+	url := fmt.Sprintf("%s/internal/supply/supplies/%d", s.config.OMSClientConfig.Address, supplyId)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
