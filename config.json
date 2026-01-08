@@ -1,0 +1,19 @@
+{
+  "ServerConfig": {
+    "Port": "8080",
+    "Env": "DEV",
+    "PrometheusPort": "8085",
+    "PrometheusEnabled": false,
+    "NewRelicEnabled": true,
+    "AppName": "helper-service",
+    "NewRelicLicense": "XXX"
+  },
+  "PlatformClientConfig": {
+    "Address": "http://internal-staging-internal-lb-428946047.ap-south-1.elb.amazonaws.com:8080",
+    "Timeout": "10s"
+  },
+  "OMSClientConfig": {
+    "Address": "http://internal-staging-internal-lb-428946047.ap-south-1.elb.amazonaws.com:8080",
+    "Timeout": "10s"
+  }
+}

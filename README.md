@@ -1,3 +1,4 @@
 # helper-service
-Repo for all kind of helper scripts
-1. Assigned pn images generation
+
+# First user case: image-generator
+Repo for creating images o backend like assigned supply images
