@@ -12,6 +12,7 @@ import (
 
 func registerRoutes(ctx context.Context, app *app.App, service facade.Service, configuration *config.Configuration) {
 	basepath := app.Engine.Group("helper-service")
+	app.Engine.GET("/health-check", HealthCheck)
 	basepath.GET("/health-check", HealthCheck)
 
 	//pn-image_generator-geenrator
