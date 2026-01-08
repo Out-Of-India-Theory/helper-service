@@ -8,10 +8,12 @@
     "AppName": "helper-service",
     "NewRelicLicense": "XXX"
   },
-  "AwsClientConfig": {
-    "Address": "http://internal-staging-internal-lb-428946047.ap-south-1.elb.amazonaws.com:8080"
+  "PlatformClientConfig": {
+    "Address": "http://internal-staging-internal-lb-428946047.ap-south-1.elb.amazonaws.com:8080",
+    "Timeout": "10s"
   },
-  "SupplyClientConfig": {
-    "Address": "http://internal-staging-internal-lb-428946047.ap-south-1.elb.amazonaws.com:8080"
+  "OMSClientConfig": {
+    "Address": "http://internal-staging-internal-lb-428946047.ap-south-1.elb.amazonaws.com:8080",
+    "Timeout": "10s"
   }
 }
