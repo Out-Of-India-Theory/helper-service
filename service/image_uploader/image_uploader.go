@@ -10,6 +10,7 @@ import (
 	"go.uber.org/zap"
 	"io/ioutil"
 	"net/http"
+	"strings"
 )
 
 type UploadApiResponse struct {
@@ -32,7 +33,7 @@ func InitImageUploader(ctx context.Context, configuration *config.Configuration)
 
 func (s *ImageUploader) UploadToS3(ctx context.Context, fileName string, fileStream []byte) (string, error) {
 	var apiURL string
-	if s.configuration.ServerConfig.Env == "PROD" || s.configuration.ServerConfig.Env == "PRODUCTION" {
+	if s.configuration.ServerConfig.Env == "PROD" || s.configuration.ServerConfig.Env == "PRODUCTION" || strings.Contains(s.configuration.OMSClientConfig.Address, "production") {
 		apiURL = fmt.Sprintf("%s/platform/document/v1/upload/prod_supply_pn_images?file_name=%s", s.configuration.OMSClientConfig.Address, fileName)
 	} else {
 		apiURL = fmt.Sprintf("%s/platform/document/v1/upload/jyotisha_pn_image?file_name=%s", s.configuration.OMSClientConfig.Address, fileName)
