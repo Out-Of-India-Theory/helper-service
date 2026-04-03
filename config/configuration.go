@@ -52,6 +52,7 @@ func init() {
 		panic(err)
 	}
 	v.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
+	v.BindEnv("ServerConfig.Env", "SERVERCONFIG_ENV")
 	if err = v.Unmarshal(&configuration); err != nil {
 		fmt.Printf("error while deserializing config, %v\n", err)
 		panic(err)
