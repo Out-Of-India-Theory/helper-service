@@ -36,6 +36,9 @@ RUN curl -L -o NotoSansBengali-Regular.ttf https://github.com/googlefonts/noto-f
 # Kannada
 RUN curl -L -o NotoSansKannada-Regular.ttf https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansKannada/NotoSansKannada-Regular.ttf
 
+# Gurmukhi (Punjabi)
+RUN curl -L -o NotoSansGurmukhi-Regular.ttf https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansGurmukhi/NotoSansGurmukhi-Regular.ttf
+
 # Rebuild font cache
 RUN fc-cache -f -v
 
