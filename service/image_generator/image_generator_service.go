@@ -57,6 +57,9 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 		"ta": fmt.Sprintf("உங்கள் ஜோதிட ஆலோசனை\n%s க்கு\nஒதுக்கப்பட்டுள்ளது", supplyDetails.Data.NameV1["ta"]),
 		"te": fmt.Sprintf("మీ జ్యోతిష సంప్రదింపు సేవ\n%s కు\nకేటాయించబడింది", supplyDetails.Data.NameV1["te"]),
 		"mr": fmt.Sprintf("आपली ज्योतिष सल्ला सेवा\n%s कडे\nसोपविण्यात आली आहे।", supplyDetails.Data.NameV1["mr"]),
+		"bn": fmt.Sprintf("আপনার জ্যোতিষ পরামর্শ সেবা\n%s-কে\nবরাদ্দ করা হয়েছে।", supplyDetails.Data.NameV1["bn"]),
+		"pa": fmt.Sprintf("ਤੁਹਾਡੀ ਜੋਤਿਸ਼ ਸਲਾਹ ਸੇਵਾ\n%s ਨੂੰ\nਸੌਂਪੀ ਗਈ ਹੈ।", supplyDetails.Data.NameV1["pa"]),
+		"ml": fmt.Sprintf("നിങ്ങളുടെ ജ്യോതിഷ കൺസൾട്ടേഷൻ\n%s-ന്\nനൽകിയിരിക്കുന്നു", supplyDetails.Data.NameV1["ml"]),
 	}
 
 	jyotishaTranslations := map[string]string{
@@ -67,6 +70,9 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 		"ta": fmt.Sprintf("உங்கள் ஜோதிட ஆலோசனை\n%s க்கு\nஒதுக்கப்பட்டுள்ளது", supplyDetails.Data.NameV1["ta"]),
 		"te": fmt.Sprintf("మీ జ్యోతిష సంప్రదింపు సేవ\n%s కు\nకేటాయించబడింది", supplyDetails.Data.NameV1["te"]),
 		"mr": fmt.Sprintf("आपली ज्योतिष सल्ला सेवा\n%s कडे\nसोपविण्यात आली आहे।", supplyDetails.Data.NameV1["mr"]),
+		"bn": fmt.Sprintf("আপনার জ্যোতিষ পরামর্শ সেবা\n%s-কে\nবরাদ্দ করা হয়েছে।", supplyDetails.Data.NameV1["bn"]),
+		"pa": fmt.Sprintf("ਤੁਹਾਡੀ ਜੋਤਿਸ਼ ਸਲਾਹ ਸੇਵਾ\n%s ਨੂੰ\nਸੌਂਪੀ ਗਈ ਹੈ।", supplyDetails.Data.NameV1["pa"]),
+		"ml": fmt.Sprintf("നിങ്ങളുടെ ജ്യോതിഷ കൺസൾട്ടേഷൻ\n%s-ന്\nനൽകിയിരിക്കുന്നു", supplyDetails.Data.NameV1["ml"]),
 	}
 
 	experienceText := map[string]string{
@@ -77,6 +83,9 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 		"ta": "%d வருட அனுபவம்",
 		"te": "%d సంవత్సరాల అనుభవం",
 		"mr": "%d वर्षांचा अनुभव",
+		"bn": "%d বছরের অভিজ্ঞতা",
+		"pa": "%d ਸਾਲਾਂ ਦਾ ਤਜਰਬਾ",
+		"ml": "%d വർഷത്തെ അനുഭവം",
 	}
 
 	checkStatusText := map[string]string{
@@ -87,6 +96,9 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 		"ta": "ஆர்டர் நிலையை சரிபார்க்கவும்",
 		"te": "ఆర్డర్ స్థితిని తనిఖీ చేయండి",
 		"mr": "ऑर्डर स्थिती तपासा",
+		"bn": "অর্ডার স্থিতি দেখুন",
+		"pa": "ਆਰਡਰ ਸਥਿਤੀ ਵੇਖੋ",
+		"ml": "ഓർഡർ സ്ഥിതി പരിശോധിക്കുക",
 	}
 
 	fontMap := map[string]string{
@@ -97,6 +109,9 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 		"gu": "assets/fonts/NotoSansGujarati-Regular.ttf",
 		"ta": "assets/fonts/NotoSansTamil-Regular.ttf",
 		"te": "assets/fonts/NotoSansTelugu-Regular.ttf",
+		"bn": "assets/fonts/NotoSansBengali-Regular.ttf",
+		"pa": "assets/fonts/NotoSansGurmukhi-Regular.ttf",
+		"ml": "assets/fonts/NotoSansMalayalam-Regular.ttf",
 	}
 
 	bgPath, _ := filepath.Abs("assets/images/background.png")
