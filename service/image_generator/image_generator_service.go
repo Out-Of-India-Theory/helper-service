@@ -49,30 +49,34 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 		return err
 	}
 
+	nameSpan := func(name string) string {
+		return fmt.Sprintf(`<span class="name">%s</span>`, name)
+	}
+
 	prashnaTranslations := map[string]string{
-		"en": fmt.Sprintf("Your Jyotisha Consultation\nhas been assigned to\n%s", supplyDetails.Data.NameV1["en"]),
-		"hi": fmt.Sprintf("आपकी ज्योतिष परामर्श सेवा\n%s को\nसौंप दी गई है।", supplyDetails.Data.NameV1["hi"]),
-		"kn": fmt.Sprintf("ನಿಮ್ಮ ಜ್ಯೋತಿಷ್ಯ ಸಲಹೆ\n%s ಗೆ\nಹಂಚಲಾಗಿದೆ", supplyDetails.Data.NameV1["kn"]),
-		"gu": fmt.Sprintf("તમારી જ્યોતિષ પરામર્શ સેવા\n%s ને\nસોંપવામાં આવી છે।", supplyDetails.Data.NameV1["gu"]),
-		"ta": fmt.Sprintf("உங்கள் ஜோதிட ஆலோசனை\n%s க்கு\nஒதுக்கப்பட்டுள்ளது", supplyDetails.Data.NameV1["ta"]),
-		"te": fmt.Sprintf("మీ జ్యోతిష సంప్రదింపు సేవ\n%s కు\nకేటాయించబడింది", supplyDetails.Data.NameV1["te"]),
-		"mr": fmt.Sprintf("आपली ज्योतिष सल्ला सेवा\n%s कडे\nसोपविण्यात आली आहे।", supplyDetails.Data.NameV1["mr"]),
-		"bn": fmt.Sprintf("আপনার জ্যোতিষ পরামর্শ সেবা\n%s-কে\nবরাদ্দ করা হয়েছে।", supplyDetails.Data.NameV1["bn"]),
-		"pa": fmt.Sprintf("ਤੁਹਾਡੀ ਜੋਤਿਸ਼ ਸਲਾਹ ਸੇਵਾ\n%s ਨੂੰ\nਸੌਂਪੀ ਗਈ ਹੈ।", supplyDetails.Data.NameV1["pa"]),
-		"ml": fmt.Sprintf("നിങ്ങളുടെ ജ്യോതിഷ കൺസൾട്ടേഷൻ\n%s-ന്\nനൽകിയിരിക്കുന്നു", supplyDetails.Data.NameV1["ml"]),
+		"en": fmt.Sprintf("Your Jyotisha Consultation\nhas been assigned to\n%s", nameSpan(supplyDetails.Data.NameV1["en"])),
+		"hi": fmt.Sprintf("आपकी ज्योतिष परामर्श सेवा\n%s को\nसौंप दी गई है।", nameSpan(supplyDetails.Data.NameV1["hi"])),
+		"kn": fmt.Sprintf("ನಿಮ್ಮ ಜ್ಯೋತಿಷ್ಯ ಸಲಹೆ\n%s ಗೆ\nಹಂಚಲಾಗಿದೆ", nameSpan(supplyDetails.Data.NameV1["kn"])),
+		"gu": fmt.Sprintf("તમારી જ્યોતિષ પરામર્શ સેવા\n%s ને\nસોંપવામાં આવી છે।", nameSpan(supplyDetails.Data.NameV1["gu"])),
+		"ta": fmt.Sprintf("உங்கள் ஜோதிட ஆலோசனை\n%s க்கு\nஒதுக்கப்பட்டுள்ளது", nameSpan(supplyDetails.Data.NameV1["ta"])),
+		"te": fmt.Sprintf("మీ జ్యోతిష సంప్రదింపు సేవ\n%s కు\nకేటాయించబడింది", nameSpan(supplyDetails.Data.NameV1["te"])),
+		"mr": fmt.Sprintf("आपली ज्योतिष सल्ला सेवा\n%s कडे\nसोपविण्यात आली आहे।", nameSpan(supplyDetails.Data.NameV1["mr"])),
+		"bn": fmt.Sprintf("আপনার জ্যোতিষ পরামর্শ সেবা\n%s-কে\nবরাদ্দ করা হয়েছে।", nameSpan(supplyDetails.Data.NameV1["bn"])),
+		"pa": fmt.Sprintf("ਤੁਹਾਡੀ ਜੋਤਿਸ਼ ਸਲਾਹ ਸੇਵਾ\n%s ਨੂੰ\nਸੌਂਪੀ ਗਈ ਹੈ।", nameSpan(supplyDetails.Data.NameV1["pa"])),
+		"ml": fmt.Sprintf("നിങ്ങളുടെ ജ്യോതിഷ കൺസൾട്ടേഷൻ\n%s-ന്\nനൽകിയിരിക്കുന്നു", nameSpan(supplyDetails.Data.NameV1["ml"])),
 	}
 
 	jyotishaTranslations := map[string]string{
-		"en": fmt.Sprintf("Your Jyotisha Consultation\nhas been assigned to\n%s", supplyDetails.Data.NameV1["en"]),
-		"hi": fmt.Sprintf("आपकी ज्योतिष परामर्श सेवा\n%s को\nसौंप दी गई है।", supplyDetails.Data.NameV1["hi"]),
-		"kn": fmt.Sprintf("ನಿಮ್ಮ ಜ್ಯೋತಿಷ್ಯ ಸಲಹೆ\n%s ಗೆ\nಹಂಚಲಾಗಿದೆ", supplyDetails.Data.NameV1["kn"]),
-		"gu": fmt.Sprintf("તમારી જ્યોતિષ પરામર્શ સેવા\n%s ને\nસોંપવામાં આવી છે।", supplyDetails.Data.NameV1["gu"]),
-		"ta": fmt.Sprintf("உங்கள் ஜோதிட ஆலோசனை\n%s க்கு\nஒதுக்கப்பட்டுள்ளது", supplyDetails.Data.NameV1["ta"]),
-		"te": fmt.Sprintf("మీ జ్యోతిష సంప్రదింపు సేవ\n%s కు\nకేటాయించబడింది", supplyDetails.Data.NameV1["te"]),
-		"mr": fmt.Sprintf("आपली ज्योतिष सल्ला सेवा\n%s कडे\nसोपविण्यात आली आहे।", supplyDetails.Data.NameV1["mr"]),
-		"bn": fmt.Sprintf("আপনার জ্যোতিষ পরামর্শ সেবা\n%s-কে\nবরাদ্দ করা হয়েছে।", supplyDetails.Data.NameV1["bn"]),
-		"pa": fmt.Sprintf("ਤੁਹਾਡੀ ਜੋਤਿਸ਼ ਸਲਾਹ ਸੇਵਾ\n%s ਨੂੰ\nਸੌਂਪੀ ਗਈ ਹੈ।", supplyDetails.Data.NameV1["pa"]),
-		"ml": fmt.Sprintf("നിങ്ങളുടെ ജ്യോതിഷ കൺസൾട്ടേഷൻ\n%s-ന്\nനൽകിയിരിക്കുന്നു", supplyDetails.Data.NameV1["ml"]),
+		"en": fmt.Sprintf("Your Jyotisha Consultation\nhas been assigned to\n%s", nameSpan(supplyDetails.Data.NameV1["en"])),
+		"hi": fmt.Sprintf("आपकी ज्योतिष परामर्श सेवा\n%s को\nसौंप दी गई है।", nameSpan(supplyDetails.Data.NameV1["hi"])),
+		"kn": fmt.Sprintf("ನಿಮ್ಮ ಜ್ಯೋತಿಷ್ಯ ಸಲಹೆ\n%s ಗೆ\nಹಂಚಲಾಗಿದೆ", nameSpan(supplyDetails.Data.NameV1["kn"])),
+		"gu": fmt.Sprintf("તમારી જ્યોતિષ પરામર્શ સેવા\n%s ને\nસોંપવામાં આવી છે।", nameSpan(supplyDetails.Data.NameV1["gu"])),
+		"ta": fmt.Sprintf("உங்கள் ஜோதிட ஆலோசனை\n%s க்கு\nஒதுக்கப்பட்டுள்ளது", nameSpan(supplyDetails.Data.NameV1["ta"])),
+		"te": fmt.Sprintf("మీ జ్యోతిష సంప్రదింపు సేవ\n%s కు\nకేటాయించబడింది", nameSpan(supplyDetails.Data.NameV1["te"])),
+		"mr": fmt.Sprintf("आपली ज्योतिष सल्ला सेवा\n%s कडे\nसोपविण्यात आली आहे।", nameSpan(supplyDetails.Data.NameV1["mr"])),
+		"bn": fmt.Sprintf("আপনার জ্যোতিষ পরামর্শ সেবা\n%s-কে\nবরাদ্দ করা হয়েছে।", nameSpan(supplyDetails.Data.NameV1["bn"])),
+		"pa": fmt.Sprintf("ਤੁਹਾਡੀ ਜੋਤਿਸ਼ ਸਲਾਹ ਸੇਵਾ\n%s ਨੂੰ\nਸੌਂਪੀ ਗਈ ਹੈ।", nameSpan(supplyDetails.Data.NameV1["pa"])),
+		"ml": fmt.Sprintf("നിങ്ങളുടെ ജ്യോതിഷ കൺസൾട്ടേഷൻ\n%s-ന്\nനൽകിയിരിക്കുന്നു", nameSpan(supplyDetails.Data.NameV1["ml"])),
 	}
 
 	experienceText := map[string]string{
@@ -260,6 +264,7 @@ func (s *ImageGeneratorService) GenerateHTMLToImage(ctx context.Context, htmlPat
 		chromedp.EmulateViewport(1120, 800, chromedp.EmulateScale(2)), // MUST match CSS
 		chromedp.Navigate("file://"+absPath),
 		chromedp.WaitReady("body", chromedp.ByQuery),
+		chromedp.WaitVisible("body[data-render-ready]", chromedp.ByQuery),
 		chromedp.FullScreenshot(&buf, 100),
 	)
 	if err != nil {
