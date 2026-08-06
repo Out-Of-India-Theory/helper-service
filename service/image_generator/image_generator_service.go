@@ -64,6 +64,8 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 		"bn": fmt.Sprintf("আপনার জ্যোতিষ পরামর্শ সেবা\n%s-কে\nবরাদ্দ করা হয়েছে।", nameSpan(supplyDetails.Data.NameV1["bn"])),
 		"pa": fmt.Sprintf("ਤੁਹਾਡੀ ਜੋਤਿਸ਼ ਸਲਾਹ ਸੇਵਾ\n%s ਨੂੰ\nਸੌਂਪੀ ਗਈ ਹੈ।", nameSpan(supplyDetails.Data.NameV1["pa"])),
 		"ml": fmt.Sprintf("നിങ്ങളുടെ ജ്യോതിഷ കൺസൾട്ടേഷൻ\n%s-ന്\nനൽകിയിരിക്കുന്നു", nameSpan(supplyDetails.Data.NameV1["ml"])),
+		"as": fmt.Sprintf("আপোনাৰ জ্যোতিষ পৰামৰ্শ সেৱা\n%s-ক\nআবণ্টন কৰা হৈছে।", nameSpan(supplyDetails.Data.NameV1["as"])),
+		"od": fmt.Sprintf("ଆପଣଙ୍କ ଜ୍ୟୋତିଷ ପରାମର୍ଶ ସେବା\n%s-ଙ୍କୁ\nପ୍ରଦାନ କରାଯାଇଛି।", nameSpan(supplyDetails.Data.NameV1["od"])),
 	}
 
 	jyotishaTranslations := map[string]string{
@@ -77,6 +79,8 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 		"bn": fmt.Sprintf("আপনার জ্যোতিষ পরামর্শ সেবা\n%s-কে\nবরাদ্দ করা হয়েছে।", nameSpan(supplyDetails.Data.NameV1["bn"])),
 		"pa": fmt.Sprintf("ਤੁਹਾਡੀ ਜੋਤਿਸ਼ ਸਲਾਹ ਸੇਵਾ\n%s ਨੂੰ\nਸੌਂਪੀ ਗਈ ਹੈ।", nameSpan(supplyDetails.Data.NameV1["pa"])),
 		"ml": fmt.Sprintf("നിങ്ങളുടെ ജ്യോതിഷ കൺസൾട്ടേഷൻ\n%s-ന്\nനൽകിയിരിക്കുന്നു", nameSpan(supplyDetails.Data.NameV1["ml"])),
+		"as": fmt.Sprintf("আপোনাৰ জ্যোতিষ পৰামৰ্শ সেৱা\n%s-ক\nআবণ্টন কৰা হৈছে।", nameSpan(supplyDetails.Data.NameV1["as"])),
+		"od": fmt.Sprintf("ଆପଣଙ୍କ ଜ୍ୟୋତିଷ ପରାମର୍ଶ ସେବା\n%s-ଙ୍କୁ\nପ୍ରଦାନ କରାଯାଇଛି।", nameSpan(supplyDetails.Data.NameV1["od"])),
 	}
 
 	experienceText := map[string]string{
@@ -90,6 +94,8 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 		"bn": "%d বছরের অভিজ্ঞতা",
 		"pa": "%d ਸਾਲਾਂ ਦਾ ਤਜਰਬਾ",
 		"ml": "%d വർഷത്തെ അനുഭവം",
+		"as": "%d বছৰৰ অভিজ্ঞতা",
+		"od": "%d ବର୍ଷର ଅଭିଜ୍ଞତା",
 	}
 
 	checkStatusText := map[string]string{
@@ -103,6 +109,8 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 		"bn": "অর্ডার স্থিতি দেখুন",
 		"pa": "ਆਰਡਰ ਸਥਿਤੀ ਵੇਖੋ",
 		"ml": "ഓർഡർ സ്ഥിതി പരിശോധിക്കുക",
+		"as": "অৰ্ডাৰৰ স্থিতি চাওক",
+		"od": "ଅର୍ଡର ସ୍ଥିତି ଯାଞ୍ଚ କରନ୍ତୁ",
 	}
 
 	fontMap := map[string]string{
@@ -116,6 +124,8 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 		"bn": "assets/fonts/NotoSansBengali-Regular.ttf",
 		"pa": "assets/fonts/NotoSansGurmukhi-Regular.ttf",
 		"ml": "assets/fonts/NotoSansMalayalam-Regular.ttf",
+		"as": "assets/fonts/NotoSansBengali-Regular.ttf",
+		"od": "assets/fonts/NotoSansOriya-Regular.ttf",
 	}
 
 	bgPath, _ := filepath.Abs("assets/images/background.png")
