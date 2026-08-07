@@ -39,6 +39,9 @@ RUN curl -L -o NotoSansKannada-Regular.ttf https://github.com/googlefonts/noto-f
 # Gurmukhi (Punjabi)
 RUN curl -L -o NotoSansGurmukhi-Regular.ttf https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansGurmukhi/NotoSansGurmukhi-Regular.ttf
 
+# Oriya (Odia). Assamese (as) reuses the Bengali font above.
+RUN curl -L -o NotoSansOriya-Regular.ttf https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansOriya/NotoSansOriya-Regular.ttf
+
 # Rebuild font cache
 RUN fc-cache -f -v
 
