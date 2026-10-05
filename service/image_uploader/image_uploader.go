@@ -49,7 +49,7 @@ func (s *ImageUploader) UploadToS3(ctx context.Context, fileName string, fileStr
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		return "", fmt.Errorf("failed to send HTTP request: %w", err)
+		return "", err
 	}
 	defer resp.Body.Close()
 
@@ -61,11 +61,11 @@ func (s *ImageUploader) UploadToS3(ctx context.Context, fileName string, fileStr
 	var Response UploadApiResponse
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return "", fmt.Errorf("failed to read API response: %w", err)
+		return "", err
 	}
 	err = json.Unmarshal(body, &Response)
 	if err != nil {
-		return "", fmt.Errorf("failed to parse API response: %w", err)
+		return "", err
 	}
 	return Response.Data, nil
 }
