@@ -1,4 +1,4 @@
-FROM golang:1.24-alpine
+FROM golang:1.25-alpine
 
 ARG TOKEN
 ENV GOPRIVATE="github.com/Out-Of-India-Theory"
