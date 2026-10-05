@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"fmt"
 	"github.com/Out-Of-India-Theory/helper-service/config"
 	"github.com/Out-Of-India-Theory/helper-service/service/facade"
 	"github.com/Out-Of-India-Theory/helper-service/service/image_generator"
@@ -10,7 +9,6 @@ import (
 	"github.com/Out-Of-India-Theory/helper-service/service/supply"
 	"github.com/Out-Of-India-Theory/oit-go-commons/app"
 	"github.com/gin-gonic/gin"
-	"github.com/newrelic/go-agent/v3/integrations/nrgin"
 	"github.com/newrelic/go-agent/v3/newrelic"
 )
 
@@ -32,17 +30,9 @@ func InitServer(ctx context.Context, app *app.App, configuration *config.Configu
 }
 
 func registerMiddleware(app *app.App, configuration *config.Configuration) {
-	newrelicApp, err := newrelic.NewApplication(
-		newrelic.ConfigAppName(fmt.Sprintf("%s-%s", app.Config.AppName, app.Config.Env)),
-		newrelic.ConfigLicense(app.Config.NewRelicLicense),
-		newrelic.ConfigAppLogForwardingEnabled(true),
-	)
-	if err != nil {
-		fmt.Println("Error while initializing new relic app")
-		return
+	if app.NewRelicApp != nil {
+		app.Engine.Use(newrelicTransactionMiddleware(app.NewRelicApp))
 	}
-	app.Engine.Use(nrgin.Middleware(newrelicApp))
-	app.Engine.Use(newrelicTransactionMiddleware(newrelicApp))
 	app.Engine.Use(CORSMiddleware())
 }
 

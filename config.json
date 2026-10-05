@@ -6,7 +6,15 @@
     "PrometheusEnabled": false,
     "NewRelicEnabled": true,
     "AppName": "helper-service",
-    "NewRelicLicense": "XXX"
+    "NewRelicLicense": "XXX",
+    "NewRelicManaged": true,
+    "Observability": {
+      "LogForwarding": {
+        "Enabled": true,
+        "Level": "warn"
+      },
+      "TraceContext": true
+    }
   },
   "PlatformClientConfig": {
     "Address": "http://internal-staging-internal-lb-428946047.ap-south-1.elb.amazonaws.com:8080",
