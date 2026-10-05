@@ -132,7 +132,7 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 
 	personImg, err := downloadImage(supplyDetails.Data.ImageWithoutBackground)
 	if err != nil {
-		return fmt.Errorf("failed to download supply image_generator: %w", err)
+		return err
 	}
 
 	personImgBytes, err := imageToPNGBytes(personImg)
@@ -204,12 +204,12 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 func downloadImage(url string) (image.Image, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		return nil, fmt.Errorf("failed to get image_generator from URL: %w", err)
+		return nil, err
 	}
 	defer resp.Body.Close()
 	img, _, err := image.Decode(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("failed to decode image_generator: %w", err)
+		return nil, err
 	}
 	return img, nil
 }
