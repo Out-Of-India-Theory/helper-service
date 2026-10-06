@@ -26,7 +26,7 @@ func InitServer(ctx context.Context, app *app.App, configuration *config.Configu
 		panic("Error while initializing http client")
 	}
 
-	<-make(chan int)
+	waitForShutdown(ctx, app)
 }
 
 func registerMiddleware(app *app.App, configuration *config.Configuration) {
@@ -39,7 +39,7 @@ func registerMiddleware(app *app.App, configuration *config.Configuration) {
 func newrelicTransactionMiddleware(newRelicApp *newrelic.Application) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
-		ctx = context.WithValue(ctx, "newRelicTransaction", newrelic.FromContext(c))
+		ctx = newrelic.NewContext(ctx, newrelic.FromContext(c))
 		c.Request = c.Request.Clone(ctx)
 		c.Next()
 	}
