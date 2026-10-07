@@ -2,6 +2,9 @@ package server
 
 import (
 	"context"
+	"os"
+	"sync"
+
 	"github.com/Out-Of-India-Theory/helper-service/config"
 	"github.com/Out-Of-India-Theory/helper-service/service/facade"
 	"github.com/Out-Of-India-Theory/helper-service/service/image_generator"
@@ -12,7 +15,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/newrelic/go-agent/v3/newrelic"
 	"go.uber.org/zap"
-	"os"
 )
 
 func InitServer(ctx context.Context, app *app.App, configuration *config.Configuration) {
@@ -21,7 +23,23 @@ func InitServer(ctx context.Context, app *app.App, configuration *config.Configu
 	imageService := image_generator.InitImageGeneratorService(ctx, supplyService, imageUploadService)
 	facadeService := facade.InitFacadeService(ctx, imageService, imageUploadService, supplyService)
 	registerMiddleware(app, configuration)
-	registerRoutes(ctx, app, facadeService, configuration)
+	// Image generation runs after the caller already got a 202; wait for in-flight
+	// jobs on shutdown instead of cutting them off.
+	var imageJobs sync.WaitGroup
+	registerRoutes(ctx, app, facadeService, configuration, &imageJobs)
+	app.OnShutdown("image-jobs", func(ctx context.Context) error {
+		done := make(chan struct{})
+		go func() {
+			imageJobs.Wait()
+			close(done)
+		}()
+		select {
+		case <-done:
+			return nil
+		case <-ctx.Done():
+			return ctx.Err()
+		}
+	})
 
 	if err := app.Run(); err != nil {
 		logging.WithContext(ctx).Error("server stopped with error", zap.Error(err))

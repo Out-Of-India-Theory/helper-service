@@ -11,6 +11,7 @@ import (
 	"go.uber.org/zap"
 	"net/http"
 	"strconv"
+	"sync"
 	"time"
 )
 
@@ -18,13 +19,16 @@ type Controller struct {
 	logger  *zap.Logger
 	service facade.Service
 	config  *config.Configuration
+	// jobs tracks background image generations so shutdown can wait for them.
+	jobs *sync.WaitGroup
 }
 
-func InitImageGeneratorController(ctx context.Context, service facade.Service, config *config.Configuration) *Controller {
+func InitImageGeneratorController(ctx context.Context, service facade.Service, config *config.Configuration, jobs *sync.WaitGroup) *Controller {
 	return &Controller{
 		logger:  logging.WithContext(ctx),
 		service: service,
 		config:  config,
+		jobs:    jobs,
 	}
 }
 
@@ -38,7 +42,9 @@ func (con *Controller) GeneratePNImage(c *gin.Context) {
 	// The request transaction ends when this handler returns, so the job gets its
 	// own background transaction for its HTTP segments to attach to.
 	nrApp := newrelic.FromContext(c).Application()
+	con.jobs.Add(1)
 	util.SafeGo(c.Request.Context(), "generate-pn-image", func() {
+		defer con.jobs.Done()
 		bgCtx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
 		defer cancel()
 		var txn *newrelic.Transaction
