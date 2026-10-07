@@ -2,16 +2,19 @@ package server
 
 import (
 	"context"
-	"fmt"
+	"os"
+	"sync"
+
 	"github.com/Out-Of-India-Theory/helper-service/config"
 	"github.com/Out-Of-India-Theory/helper-service/service/facade"
 	"github.com/Out-Of-India-Theory/helper-service/service/image_generator"
 	"github.com/Out-Of-India-Theory/helper-service/service/image_uploader"
 	"github.com/Out-Of-India-Theory/helper-service/service/supply"
 	"github.com/Out-Of-India-Theory/oit-go-commons/app"
+	"github.com/Out-Of-India-Theory/oit-go-commons/logging"
 	"github.com/gin-gonic/gin"
-	"github.com/newrelic/go-agent/v3/integrations/nrgin"
 	"github.com/newrelic/go-agent/v3/newrelic"
+	"go.uber.org/zap"
 )
 
 func InitServer(ctx context.Context, app *app.App, configuration *config.Configuration) {
@@ -20,36 +23,41 @@ func InitServer(ctx context.Context, app *app.App, configuration *config.Configu
 	imageService := image_generator.InitImageGeneratorService(ctx, supplyService, imageUploadService)
 	facadeService := facade.InitFacadeService(ctx, imageService, imageUploadService, supplyService)
 	registerMiddleware(app, configuration)
-	registerRoutes(ctx, app, facadeService, configuration)
+	// Image generation runs after the caller already got a 202; wait for in-flight
+	// jobs on shutdown instead of cutting them off.
+	var imageJobs sync.WaitGroup
+	registerRoutes(ctx, app, facadeService, configuration, &imageJobs)
+	app.OnShutdown("image-jobs", func(ctx context.Context) error {
+		done := make(chan struct{})
+		go func() {
+			imageJobs.Wait()
+			close(done)
+		}()
+		select {
+		case <-done:
+			return nil
+		case <-ctx.Done():
+			return ctx.Err()
+		}
+	})
 
-	app.StartHttpServer()
-	err := app.StartMetricsServer()
-	if err != nil {
-		panic("Error while initializing http client")
+	if err := app.Run(); err != nil {
+		logging.WithContext(ctx).Error("server stopped with error", zap.Error(err))
+		os.Exit(1)
 	}
-
-	<-make(chan int)
 }
 
 func registerMiddleware(app *app.App, configuration *config.Configuration) {
-	newrelicApp, err := newrelic.NewApplication(
-		newrelic.ConfigAppName(fmt.Sprintf("%s-%s", app.Config.AppName, app.Config.Env)),
-		newrelic.ConfigLicense(app.Config.NewRelicLicense),
-		newrelic.ConfigAppLogForwardingEnabled(true),
-	)
-	if err != nil {
-		fmt.Println("Error while initializing new relic app")
-		return
+	if app.NewRelicApp != nil {
+		app.Engine.Use(newrelicTransactionMiddleware(app.NewRelicApp))
 	}
-	app.Engine.Use(nrgin.Middleware(newrelicApp))
-	app.Engine.Use(newrelicTransactionMiddleware(newrelicApp))
 	app.Engine.Use(CORSMiddleware())
 }
 
 func newrelicTransactionMiddleware(newRelicApp *newrelic.Application) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		ctx := c.Request.Context()
-		ctx = context.WithValue(ctx, "newRelicTransaction", newrelic.FromContext(c))
+		ctx = newrelic.NewContext(ctx, newrelic.FromContext(c))
 		c.Request = c.Request.Clone(ctx)
 		c.Next()
 	}
