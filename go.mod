@@ -3,7 +3,7 @@ module github.com/Out-Of-India-Theory/helper-service
 go 1.25
 
 require (
-	github.com/Out-Of-India-Theory/oit-go-commons v0.2.8-rc
+	github.com/Out-Of-India-Theory/oit-go-commons v0.2.9-rc
 	github.com/chromedp/chromedp v0.14.2
 	github.com/gin-gonic/gin v1.11.0
 	github.com/newrelic/go-agent/v3 v3.44.1

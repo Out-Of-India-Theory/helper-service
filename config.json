@@ -8,6 +8,7 @@
     "AppName": "helper-service",
     "NewRelicLicense": "XXX",
     "NewRelicManaged": true,
+    "ShutdownTimeout": "8s",
     "Observability": {
       "LogForwarding": {
         "Enabled": true,

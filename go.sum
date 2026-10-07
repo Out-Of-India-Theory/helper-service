@@ -1,7 +1,7 @@
 github.com/DataDog/datadog-go v3.7.1+incompatible h1:HmA9qHVrHIAqpSvoCYJ+c6qst0lgqEhNW6/KwfkHbS8=
 github.com/DataDog/datadog-go v3.7.1+incompatible/go.mod h1:LButxg5PwREeZtORoXG3tL4fMGNddJ+vMq1mwgfaqoQ=
-github.com/Out-Of-India-Theory/oit-go-commons v0.2.8-rc h1:1S4YmtwLleiVcZg85rYOVzEK+wLWiNSrCWURydksIZQ=
-github.com/Out-Of-India-Theory/oit-go-commons v0.2.8-rc/go.mod h1:MxksMsTffYz3buxyX63fPiHyj8TlGB17/bTNLhmPIto=
+github.com/Out-Of-India-Theory/oit-go-commons v0.2.9-rc h1:w3FAgH8KOwb4eJPyj6aBwjWnR5t1AgIWGSadsPXq1Uk=
+github.com/Out-Of-India-Theory/oit-go-commons v0.2.9-rc/go.mod h1:MxksMsTffYz3buxyX63fPiHyj8TlGB17/bTNLhmPIto=
 github.com/afex/hystrix-go v0.0.0-20180502004556-fa1af6a1f4f5 h1:rFw4nCn9iMW+Vajsk51NtYIcwSTkXr+JGrMd36kTDJw=
 github.com/afex/hystrix-go v0.0.0-20180502004556-fa1af6a1f4f5/go.mod h1:SkGFH1ia65gfNATL8TAiHDNxPzPdmEL5uirI2Uyuz6c=
 github.com/beorn7/perks v1.0.1 h1:VlbKKnNfV8bJzeqoa4cOKqO6bYr3WgKZxO8Z16+hsOM=
