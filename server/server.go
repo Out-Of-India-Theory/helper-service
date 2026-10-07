@@ -8,8 +8,11 @@ import (
 	"github.com/Out-Of-India-Theory/helper-service/service/image_uploader"
 	"github.com/Out-Of-India-Theory/helper-service/service/supply"
 	"github.com/Out-Of-India-Theory/oit-go-commons/app"
+	"github.com/Out-Of-India-Theory/oit-go-commons/logging"
 	"github.com/gin-gonic/gin"
 	"github.com/newrelic/go-agent/v3/newrelic"
+	"go.uber.org/zap"
+	"os"
 )
 
 func InitServer(ctx context.Context, app *app.App, configuration *config.Configuration) {
@@ -20,13 +23,10 @@ func InitServer(ctx context.Context, app *app.App, configuration *config.Configu
 	registerMiddleware(app, configuration)
 	registerRoutes(ctx, app, facadeService, configuration)
 
-	app.StartHttpServer()
-	err := app.StartMetricsServer()
-	if err != nil {
-		panic("Error while initializing http client")
+	if err := app.Run(); err != nil {
+		logging.WithContext(ctx).Error("server stopped with error", zap.Error(err))
+		os.Exit(1)
 	}
-
-	waitForShutdown(ctx, app)
 }
 
 func registerMiddleware(app *app.App, configuration *config.Configuration) {
