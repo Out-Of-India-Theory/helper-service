@@ -1,17 +1,19 @@
 package image_uploader
 
 import (
-	"bytes"
 	"context"
-	"encoding/json"
 	"fmt"
 	"github.com/Out-Of-India-Theory/helper-service/config"
+	"github.com/Out-Of-India-Theory/oit-go-commons/client/http_client"
 	"github.com/Out-Of-India-Theory/oit-go-commons/logging"
 	"go.uber.org/zap"
-	"io/ioutil"
 	"net/http"
 	"strings"
+	"time"
 )
+
+// uploadTimeout covers pushing a generated PNG to the platform upload API.
+const uploadTimeout = time.Minute
 
 type UploadApiResponse struct {
 	Data    string `json:"data"`
@@ -22,12 +24,14 @@ type UploadApiResponse struct {
 type ImageUploader struct {
 	logger        *zap.Logger
 	configuration *config.Configuration
+	httpClient    *http_client.HttpBaseClientV2
 }
 
 func InitImageUploader(ctx context.Context, configuration *config.Configuration) *ImageUploader {
 	return &ImageUploader{
 		logger:        logging.WithContext(ctx),
 		configuration: configuration,
+		httpClient:    http_client.NewHttpClientV2("", 0, uploadTimeout),
 	}
 }
 
@@ -38,34 +42,15 @@ func (s *ImageUploader) UploadToS3(ctx context.Context, fileName string, fileStr
 	} else {
 		apiURL = fmt.Sprintf("%s/platform/document/v1/upload/jyotisha_pn_image?file_name=%s", s.configuration.OMSClientConfig.Address, fileName)
 	}
-	req, err := http.NewRequestWithContext(ctx, http.MethodPost, apiURL, bytes.NewReader(fileStream))
-	if err != nil {
-		s.logger.Error("failed to create upload request", zap.Error(err))
-		return "", err
-	}
+	header := http.Header{}
+	header.Set("Content-Type", "application/octet-stream")
 
-	req.Header.Set("Content-Type", "application/octet-stream")
-
-	client := &http.Client{}
-	resp, err := client.Do(req)
+	var response UploadApiResponse
+	ex, err := s.httpClient.Call(ctx, apiURL, fileStream, header, http.MethodPost, &response)
 	if err != nil {
-		return "", fmt.Errorf("failed to send HTTP request: %w", err)
+		s.logger.Error("image upload failed", zap.String("file_name", fileName),
+			zap.Int("status", ex.StatusCode), zap.String("body", ex.ResponseBody), zap.Error(err))
+		return "", fmt.Errorf("UploadToS3: %w", err)
 	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
-		body, _ := ioutil.ReadAll(resp.Body)
-		return "", fmt.Errorf("upload failed with status code %d: %s", resp.StatusCode, string(body))
-	}
-
-	var Response UploadApiResponse
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		return "", fmt.Errorf("failed to read API response: %w", err)
-	}
-	err = json.Unmarshal(body, &Response)
-	if err != nil {
-		return "", fmt.Errorf("failed to parse API response: %w", err)
-	}
-	return Response.Data, nil
+	return response.Data, nil
 }

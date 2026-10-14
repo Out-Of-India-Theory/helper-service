@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"github.com/Out-Of-India-Theory/helper-service/service/image_uploader"
 	"github.com/Out-Of-India-Theory/helper-service/service/supply"
+	"github.com/Out-Of-India-Theory/oit-go-commons/client/http_client"
 	"github.com/Out-Of-India-Theory/oit-go-commons/logging"
 	"github.com/chromedp/chromedp"
 	"go.uber.org/zap"
@@ -19,8 +20,12 @@ import (
 	"time"
 )
 
+// imageDownloadTimeout bounds fetching the supply's source image.
+const imageDownloadTimeout = time.Minute
+
 type ImageGeneratorService struct {
 	logger        *zap.Logger
+	httpClient    *http_client.HttpBaseClientV2
 	supplyService supply.Service
 	imageUploader image_uploader.Service
 	chromeCtx     context.Context
@@ -37,6 +42,7 @@ func InitImageGeneratorService(ctx context.Context, supplyService supply.Service
 	chromeCtx, _ := chromedp.NewContext(allocCtx)
 	return &ImageGeneratorService{
 		logger:        logging.WithContext(ctx),
+		httpClient:    http_client.NewHttpClientV2("", 0, imageDownloadTimeout),
 		supplyService: supplyService,
 		imageUploader: imageUploader,
 		chromeCtx:     chromeCtx,
@@ -130,7 +136,7 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 
 	bgPath, _ := filepath.Abs("assets/images/background.png")
 
-	personImg, err := downloadImage(supplyDetails.Data.ImageWithoutBackground)
+	personImg, err := s.downloadImage(ctx, supplyDetails.Data.ImageWithoutBackground)
 	if err != nil {
 		return fmt.Errorf("failed to download supply image_generator: %w", err)
 	}
@@ -201,13 +207,15 @@ func (s *ImageGeneratorService) GenerateImage(ctx context.Context, supplyId int)
 	return nil
 }
 
-func downloadImage(url string) (image.Image, error) {
-	resp, err := http.Get(url)
+func (s *ImageGeneratorService) downloadImage(ctx context.Context, url string) (image.Image, error) {
+	var body []byte
+	ex, err := s.httpClient.Call(ctx, url, nil, nil, http.MethodGet, &body)
 	if err != nil {
+		s.logger.Error("image download failed", zap.String("url", url),
+			zap.Int("status", ex.StatusCode), zap.Error(err))
 		return nil, fmt.Errorf("failed to get image_generator from URL: %w", err)
 	}
-	defer resp.Body.Close()
-	img, _, err := image.Decode(resp.Body)
+	img, _, err := image.Decode(bytes.NewReader(body))
 	if err != nil {
 		return nil, fmt.Errorf("failed to decode image_generator: %w", err)
 	}
